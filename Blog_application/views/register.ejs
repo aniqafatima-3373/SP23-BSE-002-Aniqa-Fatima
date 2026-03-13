@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Account - My Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --earth-slate: #7a9ba8; --earth-sage: #87a38d; --error-red: #b35a44; }
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), 
+                        url('/background.jpg');
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+        .form-card { background: white; padding: 40px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        h2 { color: var(--earth-slate); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 25px; }
+        .input-group { margin-bottom: 25px; text-align: left; }
+        input { width: 100%; border: none; border-bottom: 2px solid #eee; padding: 10px 0; font-family: inherit; outline: none; transition: 0.3s; color: #555; }
+        input:focus { border-bottom: 2px solid var(--earth-sage); }
+        .btn-submit { width: 100%; background: var(--earth-slate); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background: var(--earth-sage); transform: translateY(-2px); }
+        .error-container { background: #fff5f5; color: var(--error-red); padding: 15px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 20px; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2>Join Us</h2>
+        <% if (errors && errors.length > 0) { %>
+            <div class="error-container">
+                <ul style="margin:0; padding-left:20px;">
+                    <% errors.forEach(err => { %> <li><%= err.msg %></li> <% }) %>
+                </ul>
+            </div>
+        <% } %>
+        <form action="/register" method="POST">
+            <div class="input-group"><input type="text" name="username" placeholder="Username" required></div>
+            <div class="input-group"><input type="password" name="password" placeholder="Password" required></div>
+            <button type="submit" class="btn-submit">Create Account</button>
+        </form>
+        <p style="font-size: 0.85rem; color: #999; margin-top: 25px;">Already a member? <a href="/login" style="color: var(--earth-slate); text-decoration: none;">Sign In</a></p>
+    </div>
+</body>
+</html>

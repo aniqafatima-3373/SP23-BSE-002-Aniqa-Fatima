@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome - My Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            /* Update 'background.jpg' to your actual filename in public folder */
+            background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), 
+                        url('/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-container { text-align: center; padding: 20px; }
+        .welcome-text { font-size: 1.5rem; color: #7a9ba8; text-transform: uppercase; letter-spacing: 5px; font-weight: 300; margin: 0; }
+        .brand-text { font-size: 5rem; color: #5a7d8a; text-transform: uppercase; font-weight: 700; margin-top: -10px; letter-spacing: 2px; }
+        .btn-group { margin-top: 40px; }
+        .btn { padding: 12px 35px; text-decoration: none; border-radius: 5px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; margin: 0 10px; display: inline-block; border: 2px solid #7a9ba8; }
+        .btn-login { background-color: #7a9ba8; color: white; }
+        .btn-register { background-color: transparent; color: #7a9ba8; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <p class="welcome-text">Welcome To</p>
+        <h1 class="brand-text">My Blog</h1>
+        <div class="btn-group">
+            <a href="/login" class="btn btn-login">Login</a>
+            <a href="/register" class="btn btn-register">Register</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Post</title>
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --earth-slate: #7a9ba8; 
+            --earth-sage: #87a38d; 
+            --bg-overlay: rgba(255, 255, 255, 0.5); 
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; /* Centered horizontally */
+            
+            /* Consistent Background */
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('/background.jpg');
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed;
+        }
+
+        .form-card { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1); 
+            /* Large size matching Dashboard */
+            width: 90%; 
+            max-width: 1000px; 
+            animation: fadeIn 0.8s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { 
+            color: var(--earth-slate); 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            margin-top: 0;
+            margin-bottom: 30px; 
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .form-group { margin-bottom: 25px; text-align: left; }
+
+        label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--earth-slate);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"], input[type="file"] { 
+            width: 100%; 
+            border: 1px solid #eee; 
+            padding: 12px; 
+            border-radius: 8px;
+            font-family: inherit; 
+            outline: none; 
+            box-sizing: border-box;
+            background: #fcfcfc;
+        }
+
+        input:focus { border-color: var(--earth-slate); background: #fff; }
+
+        .btn-publish { 
+            width: 100%; 
+            background: var(--earth-slate); 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-weight: 700; 
+            cursor: pointer;
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            transition: 0.3s; 
+            margin-top: 20px;
+        }
+
+        .btn-publish:hover { 
+            background: var(--earth-sage); 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .back-nav { 
+            text-align: center; 
+            margin-top: 20px; 
+        }
+
+        .back-nav a { 
+            font-size: 0.85rem; 
+            color: #999; 
+            text-decoration: none; 
+            transition: 0.3s;
+        }
+
+        .back-nav a:hover { color: var(--earth-slate); }
+    </style>
+</head>
+<body>
+
+<div class="form-card">
+    <h2>Create a New Story</h2>
+
+    <form action="/post/store" method="POST" encType="multipart/form-data">
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" name="title" placeholder="Give your post a title..." required>
+        </div>
+        
+        <div class="form-group">
+            <label>Content</label>
+            <textarea name="content" id="editor1"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Featured Image</label>
+            <input type="file" name="image" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn-publish">Publish Post</button>
+    </form>
+
+    <div class="back-nav">
+        <a href="/dashboard">← Cancel and return to Dashboard</a>
+    </div>
+</div>
+
+<script>
+    // Initialize CKEditor
+    CKEDITOR.replace('editor1', {
+        height: 300,
+        // Optional: match the UI colors
+        uiColor: '#fcfcfc' 
+    });
+</script>
+
+</body>
+</html>
