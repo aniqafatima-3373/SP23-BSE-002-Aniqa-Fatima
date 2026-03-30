@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #fdfae6; color: #1a1a1a; line-height: 1.6; }
+        .main-img { border-radius: 20px; box-shadow: 15px 15px 0px #e9e6ca; width: 100%; object-fit: cover; height: 500px; }
+        .section-title { border-left: 4px solid #556B2F; padding-left: 15px; color: #556B2F; font-weight: bold; }
+        .stats-box { background-color: #e9e6ca; border-radius: 15px; padding: 20px; color: #556B2F; }
+        .instruction-step { margin-bottom: 25px; padding-left: 20px; border-left: 1px solid #556B2F; }
+        .btn-save { background-color: #3e4e22; color: white; border-radius: 30px; padding: 10px 40px; }
+    </style>
+</head>
+<body class="container py-5">
+    <div class="row align-items-start">
+        <div class="col-md-5">
+            <img src="<%= recipe.image || recipe.imageUrl %>" class="main-img mb-4">
+            
+            <div class="stats-box d-flex justify-content-between text-center mt-4">
+                <div><small>PREP TIME</small><br><strong><%= recipe.prepTime || recipe.readyInMinutes || 20 %>m</strong></div>
+                <div><small>SERVES</small><br><strong>4 People</strong></div>
+                <div><small>DIFFICULTY</small><br><strong>Beginner</strong></div>
+            </div>
+        </div>
+
+        <div class="col-md-7 ps-md-5">
+            <h6 class="text-uppercase text-muted small">The Apothecary Pantry</h6>
+            <h1 class="display-4 fw-bold mb-4" style="color: #3e4e22;"><%= recipe.title %></h1>
+            
+            <h4 class="section-title mt-5 mb-3">Ingredients List</h4>
+            <ul class="list-unstyled">
+                <% if(recipe.extendedIngredients) { %>
+                    <% recipe.extendedIngredients.forEach(ing => { %>
+                        <li class="py-1 border-bottom border-light">✔ <%= ing.original %></li>
+                    <% }) %>
+                <% } else { %>
+                    <li class="py-1 border-bottom border-light">✔ Check instructions for secret ingredients</li>
+                <% } %>
+            </ul>
+
+            <h4 class="section-title mt-5 mb-3">Culinary Protocol</h4>
+            <div class="instruction-steps">
+                <p class="lead"><%- recipe.instructions || recipe.summary %></p>
+            </div>
+
+            <div class="mt-5 d-flex gap-3">
+            
+                <a href="javascript:history.back()" class="btn btn-outline-secondary px-4" style="border-radius: 30px;">Go Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

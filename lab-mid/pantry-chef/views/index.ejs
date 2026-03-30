@@ -2,17 +2,234 @@
 <html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Pantry Chef</title>
+    <title>Pantry Chef | Dashboard</title>
+    <style>
+        :root {
+            --olive-dark: #556B2F;
+            --olive-light: #e9e6ca;
+            --cream-bg: #fdfae6;
+            --text-charcoal: #3e4e22;
+        }
+
+        body { 
+            background-color: var(--cream-bg); 
+            color: var(--text-charcoal);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+        }
+
+        /* Navbar Style */
+        .navbar-brand { font-weight: bold; color: var(--olive-dark) !important; font-style: italic; }
+        .search-nav { background: var(--olive-light); border: none; border-radius: 20px; padding: 5px 20px; width: 300px; }
+
+        /* Sidebar Form Card */
+        .sidebar-form { 
+            background-color: var(--olive-light); 
+            border: none; 
+            border-radius: 20px; 
+            padding: 25px;
+            opacity: 0.9;
+        }
+
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            color: var(--text-charcoal);
+        }
+
+        .btn-save {
+            background-color: var(--olive-dark);
+            color: white;
+            border-radius: 25px;
+            padding: 10px;
+            font-weight: bold;
+            border: none;
+        }
+
+        /* Collection Table Card */
+        .collection-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .table thead { color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .table td { vertical-align: middle; border-bottom: 1px solid #f0f0f0; padding: 15px 0; }
+
+        .badge-ingredient {
+            background-color: var(--olive-light);
+            color: var(--olive-dark);
+            font-size: 0.7rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        /* Tip Card */
+        .tip-card {
+            background-color: #d8dec3;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .tip-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; }
+    </style>
 </head>
-<body style="background-color: #fff0f5;"> <div class="container mt-5">
-        <h1 class="text-center" style="color: #d63384;">Pantry Chef</h1>
-        <p class="text-center">Enter the ingredients you have to find a recipe!</p>
-        <form action="/search" method="GET" class="mt-4">
-            <div class="input-group mb-3">
-                <input type="text" name="items" class="form-control" placeholder="e.g. egg, milk, onion" required>
-                <button class="btn btn-danger" type="submit">Search Recipes</button>
+<body>
+
+    <nav class="navbar navbar-expand-lg mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-3" href="#">Pantry Chef</a>
+            <div class="ms-auto d-flex align-items-center">
+                <form action="/search" method="GET" class="d-flex">
+                    <input type="text" name="items" class="search-nav" placeholder="Q Search ingredients...">
+                </form>
+                <div class="ms-3 rounded-circle bg-olive-dark text-white p-2">👤</div>
             </div>
-        </form>
+        </div>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="sidebar-form shadow-sm">
+                <h3 id="formTitle" class="fw-bold mb-1">Add New Recipe</h3>
+                <p class="small text-muted mb-4">Create your apothecary of flavors and techniques.</p>
+                
+                <form id="recipeForm">
+                    <input type="hidden" id="recipeId">
+                    <label class="small fw-bold">RECIPE TITLE</label>
+                    <input type="text" id="title" class="form-control" placeholder="e.g. Rosemary Infused Focaccia" required>
+                    
+                    <label class="small fw-bold">INGREDIENTS</label>
+                    <input type="text" id="ingredients" class="form-control" placeholder="List ingredients separated by commas..." required>
+
+                    <label class="small fw-bold">PREP TIME (MINS)</label>
+                    <input type="number" id="prepTime" class="form-control" value="15">
+
+                    <label class="small fw-bold">IMAGE URL</label>
+                    <input type="text" id="imageUrl" class="form-control" placeholder="Paste link here...">
+                    
+                    <label class="small fw-bold">INSTRUCTIONS</label>
+                    <textarea id="instructions" class="form-control" rows="4" placeholder="Detail the alchemy of preparation..." required></textarea>
+                    
+                    <button type="submit" class="btn btn-save w-100 mt-2" id="submitBtn">Save to Recipe Box</button>
+                    <button type="button" class="btn btn-link w-100 mt-2 text-muted" onclick="resetForm()" id="cancelBtn" style="display:none;">Cancel Edit</button>
+                </form>
+            </div>
+
+            <div class="tip-card shadow-sm">
+                <div class="pe-3">
+                    <small class="text-uppercase fw-bold text-muted" style="font-size: 0.6rem;">Quick Tip</small>
+                    <p class="small mb-0">Fresh herbs elevate any base ingredient to apothecary grade.</p>
+                </div>
+               
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="collection-card">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <h3 class="fw-bold m-0">The Collection</h3>
+                    <span class="badge bg-light text-dark border"> RECIPES</span>
+                </div>
+                <p class="small text-muted mb-4">MONGOOSE SYNC ENABLED</p>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Recipe</th>
+                            <th>Main Ingredient</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% recipes.forEach(recipe => { %>
+                        <tr>
+                            <td class="d-flex align-items-center">
+                                <img src="<%= recipe.imageUrl %>" width="45" height="45" class="rounded me-3 shadow-sm" style="object-fit: cover;">
+                                <div>
+                                    <div class="fw-bold"><%= recipe.title %></div>
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge-ingredient text-uppercase"><%= recipe.ingredients[0] %></span>
+                            </td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-light border me-2" onclick="prepareEdit('<%= encodeURIComponent(JSON.stringify(recipe)) %>')">🖊</button>
+                                <button class="btn btn-sm btn-light border text-danger" onclick="deleteRecipe('<%= recipe._id %>')">🗑</button>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <div class="text-center mt-3">
+                    <small class="text-muted" style="cursor: pointer;">ALL COLLECTION</small>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        const recipeForm = document.getElementById('recipeForm');
+
+        recipeForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('recipeId').value;
+            const data = {
+                title: document.getElementById('title').value,
+                ingredients: document.getElementById('ingredients').value.split(',').map(i => i.trim()),
+                prepTime: parseInt(document.getElementById('prepTime').value),
+                imageUrl: document.getElementById('imageUrl').value || 'https://via.placeholder.com/150',
+                instructions: document.getElementById('instructions').value
+            };
+
+            const url = id ? `/update-recipe/${id}` : '/add-recipe';
+            const method = id ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if(response.ok) location.reload();
+        });
+
+        async function deleteRecipe(id) {
+            if(confirm('Delete this from your collection?')) {
+                await fetch(`/delete-recipe/${id}`, { method: 'DELETE' });
+                location.reload();
+            }
+        }
+
+        function prepareEdit(encodedRecipe) {
+            const recipe = JSON.parse(decodeURIComponent(encodedRecipe));
+            document.getElementById('recipeId').value = recipe._id;
+            document.getElementById('title').value = recipe.title;
+            document.getElementById('ingredients').value = recipe.ingredients.join(', ');
+            document.getElementById('prepTime').value = recipe.prepTime;
+            document.getElementById('imageUrl').value = recipe.imageUrl || '';
+            document.getElementById('instructions').value = recipe.instructions;
+            
+            document.getElementById('submitBtn').innerText = "Update Selection";
+            document.getElementById('formTitle').innerText = "Update Recipe";
+            document.getElementById('cancelBtn').style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            recipeForm.reset();
+            document.getElementById('recipeId').value = "";
+            document.getElementById('submitBtn').innerText = "Save to Recipe Box";
+            document.getElementById('formTitle').innerText = "Add New Recipe";
+            document.getElementById('cancelBtn').style.display = "none";
+        }
+    </script>
 </body>
 </html>
