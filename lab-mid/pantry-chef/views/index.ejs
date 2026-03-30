@@ -1,14 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Pantry Chef | Dashboard</title>
     <style>
+        /* --- Night Mode Variables --- */
         :root {
             --olive-dark: #556B2F;
             --olive-light: #e9e6ca;
             --cream-bg: #fdfae6;
             --text-charcoal: #3e4e22;
+            --card-white: #ffffff;
+            --input-bg: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="dark"] {
+            --olive-dark: #a3b18a;
+            --olive-light: #3e4e22;
+            --cream-bg: #1a1d13;
+            --text-charcoal: #fdfae6;
+            --card-white: #2d3a1a;
+            --input-bg: rgba(255, 255, 255, 0.1);
         }
 
         body { 
@@ -16,11 +28,20 @@
             color: var(--text-charcoal);
             font-family: 'Segoe UI', Roboto, sans-serif;
             padding: 20px;
+            transition: 0.3s ease;
         }
 
         /* Navbar Style */
         .navbar-brand { font-weight: bold; color: var(--olive-dark) !important; font-style: italic; }
-        .search-nav { background: var(--olive-light); border: none; border-radius: 20px; padding: 5px 20px; width: 300px; }
+        .search-nav { 
+            background: var(--olive-light); 
+            border: none; 
+            border-radius: 20px; 
+            padding: 5px 20px; 
+            width: 300px; 
+            color: var(--text-charcoal);
+        }
+        .search-nav::placeholder { color: var(--text-charcoal); opacity: 0.6; }
 
         /* Sidebar Form Card */
         .sidebar-form { 
@@ -28,16 +49,17 @@
             border: none; 
             border-radius: 20px; 
             padding: 25px;
-            opacity: 0.9;
+            color: var(--text-charcoal);
         }
 
         .form-control {
-            background-color: rgba(255, 255, 255, 0.5);
-            border: none;
+            background-color: var(--input-bg);
+            border: 1px solid rgba(0,0,0,0.1);
             border-radius: 10px;
             margin-bottom: 15px;
             color: var(--text-charcoal);
         }
+        .form-control:focus { background-color: var(--input-bg); color: var(--text-charcoal); border-color: var(--olive-dark); }
 
         .btn-save {
             background-color: var(--olive-dark);
@@ -50,34 +72,34 @@
 
         /* Collection Table Card */
         .collection-card {
-            background: white;
+            background: var(--card-white);
             border-radius: 20px;
             padding: 25px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            color: var(--text-charcoal);
         }
 
-        .table thead { color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-        .table td { vertical-align: middle; border-bottom: 1px solid #f0f0f0; padding: 15px 0; }
+        .table { color: var(--text-charcoal); }
+        .table thead { color: var(--olive-dark); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .table td { vertical-align: middle; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 15px 0; }
 
         .badge-ingredient {
             background-color: var(--olive-light);
-            color: var(--olive-dark);
+            color: var(--text-charcoal);
             font-size: 0.7rem;
             padding: 5px 10px;
             border-radius: 5px;
+            border: 1px solid var(--olive-dark);
         }
 
-        /* Tip Card */
-        .tip-card {
-            background-color: #d8dec3;
-            border-radius: 15px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
+        .btn-theme-toggle {
+            border-radius: 20px;
+            border: 1px solid var(--olive-dark);
+            color: var(--olive-dark);
+            background: transparent;
+            padding: 5px 15px;
+            font-size: 0.8rem;
         }
-
-        .tip-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; }
     </style>
 </head>
 <body>
@@ -86,10 +108,10 @@
         <div class="container-fluid">
             <a class="navbar-brand fs-3" href="#">Pantry Chef</a>
             <div class="ms-auto d-flex align-items-center">
+                <button class="btn btn-theme-toggle me-3" onclick="toggleTheme()" id="themeBtn">🌙 Night Mode</button>
                 <form action="/search" method="GET" class="d-flex">
                     <input type="text" name="items" class="search-nav" placeholder="Q Search ingredients...">
                 </form>
-                <div class="ms-3 rounded-circle bg-olive-dark text-white p-2">👤</div>
             </div>
         </div>
     </nav>
@@ -98,15 +120,15 @@
         <div class="col-md-4">
             <div class="sidebar-form shadow-sm">
                 <h3 id="formTitle" class="fw-bold mb-1">Add New Recipe</h3>
-                <p class="small text-muted mb-4">Create your apothecary of flavors and techniques.</p>
+                <p class="small text-muted mb-4">Create your apothecary of flavors.</p>
                 
                 <form id="recipeForm">
                     <input type="hidden" id="recipeId">
                     <label class="small fw-bold">RECIPE TITLE</label>
-                    <input type="text" id="title" class="form-control" placeholder="e.g. Rosemary Infused Focaccia" required>
+                    <input type="text" id="title" class="form-control" placeholder="e.g. Rosemary Focaccia" required>
                     
                     <label class="small fw-bold">INGREDIENTS</label>
-                    <input type="text" id="ingredients" class="form-control" placeholder="List ingredients separated by commas..." required>
+                    <input type="text" id="ingredients" class="form-control" placeholder="Egg, Milk, etc..." required>
 
                     <label class="small fw-bold">PREP TIME (MINS)</label>
                     <input type="number" id="prepTime" class="form-control" value="15">
@@ -115,19 +137,11 @@
                     <input type="text" id="imageUrl" class="form-control" placeholder="Paste link here...">
                     
                     <label class="small fw-bold">INSTRUCTIONS</label>
-                    <textarea id="instructions" class="form-control" rows="4" placeholder="Detail the alchemy of preparation..." required></textarea>
+                    <textarea id="instructions" class="form-control" rows="4" placeholder="Detail the preparation..." required></textarea>
                     
                     <button type="submit" class="btn btn-save w-100 mt-2" id="submitBtn">Save to Recipe Box</button>
                     <button type="button" class="btn btn-link w-100 mt-2 text-muted" onclick="resetForm()" id="cancelBtn" style="display:none;">Cancel Edit</button>
                 </form>
-            </div>
-
-            <div class="tip-card shadow-sm">
-                <div class="pe-3">
-                    <small class="text-uppercase fw-bold text-muted" style="font-size: 0.6rem;">Quick Tip</small>
-                    <p class="small mb-0">Fresh herbs elevate any base ingredient to apothecary grade.</p>
-                </div>
-               
             </div>
         </div>
 
@@ -135,47 +149,61 @@
             <div class="collection-card">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <h3 class="fw-bold m-0">The Collection</h3>
-                    <span class="badge bg-light text-dark border"> RECIPES</span>
+                    <span class="badge bg-light text-dark border"><%= recipes.length %> RECIPES</span>
                 </div>
                 <p class="small text-muted mb-4">MONGOOSE SYNC ENABLED</p>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Recipe</th>
-                            <th>Main Ingredient</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% recipes.forEach(recipe => { %>
-                        <tr>
-                            <td class="d-flex align-items-center">
-                                <img src="<%= recipe.imageUrl %>" width="45" height="45" class="rounded me-3 shadow-sm" style="object-fit: cover;">
-                                <div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Recipe</th>
+                                <th>Main Ingredient</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% recipes.forEach(recipe => { %>
+                            <tr>
+                                <td class="d-flex align-items-center">
+                                    <img src="<%= recipe.imageUrl %>" width="45" height="45" class="rounded me-3 shadow-sm" style="object-fit: cover;">
                                     <div class="fw-bold"><%= recipe.title %></div>
-                                    
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge-ingredient text-uppercase"><%= recipe.ingredients[0] %></span>
-                            </td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-light border me-2" onclick="prepareEdit('<%= encodeURIComponent(JSON.stringify(recipe)) %>')">🖊</button>
-                                <button class="btn btn-sm btn-light border text-danger" onclick="deleteRecipe('<%= recipe._id %>')">🗑</button>
-                            </td>
-                        </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-                <div class="text-center mt-3">
-                    <small class="text-muted" style="cursor: pointer;">ALL COLLECTION</small>
+                                </td>
+                                <td>
+                                    <span class="badge-ingredient"><%= recipe.ingredients[0] %></span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-light border me-1" onclick="prepareEdit('<%= encodeURIComponent(JSON.stringify(recipe)) %>')">🖊</button>
+                                    <button class="btn btn-sm btn-light border text-danger" onclick="deleteRecipe('<%= recipe._id %>')">🗑</button>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // --- Theme Logic ---
+        function applyTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeBtn').innerHTML = savedTheme === 'dark' ? '☀️ Day Mode' : '🌙 Night Mode';
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            document.getElementById('themeBtn').innerHTML = next === 'dark' ? '☀️ Day Mode' : '🌙 Night Mode';
+        }
+
+        applyTheme();
+
+        // --- Recipe Logic ---
         const recipeForm = document.getElementById('recipeForm');
 
         recipeForm.addEventListener('submit', async (e) => {

@@ -1,37 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #fdfae6; color: #1a1a1a; line-height: 1.6; }
-        .main-img { border-radius: 20px; box-shadow: 15px 15px 0px #e9e6ca; width: 100%; object-fit: cover; height: 500px; }
-        .section-title { border-left: 4px solid #556B2F; padding-left: 15px; color: #556B2F; font-weight: bold; }
-        .stats-box { background-color: #e9e6ca; border-radius: 15px; padding: 20px; color: #556B2F; }
-        .instruction-step { margin-bottom: 25px; padding-left: 20px; border-left: 1px solid #556B2F; }
-        .btn-save { background-color: #3e4e22; color: white; border-radius: 30px; padding: 10px 40px; }
+        /* --- CSS Variables for Night Mode --- */
+        :root {
+            --bg-color: #fdfae6;
+            --text-color: #1a1a1a;
+            --card-bg: #e9e6ca;
+            --heading-color: #3e4e22;
+            --accent-color: #556B2F;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1d13;
+            --text-color: #fdfae6;
+            --card-bg: #2d3a1a;
+            --heading-color: #a3b18a;
+            --accent-color: #8fa37a;
+        }
+
+        body { background-color: var(--bg-color); color: var(--text-color); transition: 0.3s; line-height: 1.6; }
+        
+        .main-img { border-radius: 20px; box-shadow: 15px 15px 0px var(--card-bg); width: 100%; object-fit: cover; height: 500px; }
+        .section-title { border-left: 4px solid var(--accent-color); padding-left: 15px; color: var(--accent-color); font-weight: bold; }
+        .stats-box { background-color: var(--card-bg); border-radius: 15px; padding: 20px; color: var(--accent-color); }
+        
+        /* Innovation UI Styling */
+        .sub-box { border: 2px dashed var(--accent-color); border-radius: 15px; padding: 15px; background-color: rgba(255,255,255,0.05); }
+        .btn-olive { background-color: var(--heading-color); color: white; border-radius: 30px; border: none; padding: 10px 25px; transition: 0.3s; }
+        .btn-olive:hover { opacity: 0.9; transform: scale(1.05); }
+        .btn-download { border: 2px solid var(--accent-color); color: var(--accent-color); border-radius: 30px; padding: 10px 30px; font-weight: bold; background: transparent; }
+
+        @media print {
+            .no-print, .btn, .sub-box, .input-group { display: none !important; }
+            body { background-color: white !important; color: black !important; }
+            .main-img { height: 350px !important; box-shadow: none !important; border: 1px solid #eee; }
+            .stats-box { border: 1px solid #556B2F !important; background-color: #fdfae6 !important; -webkit-print-color-adjust: exact; }
+        }
     </style>
 </head>
 <body class="container py-5">
-    <div class="row align-items-start">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+        <a href="javascript:history.back()" class="btn btn-outline-secondary px-4" style="border-radius: 30px;">← Back</a>
+        <button class="btn btn-olive" onclick="toggleTheme()" id="themeBtn">🌙 Night Mode</button>
+    </div>
+
+    <div class="row align-items-start" id="recipeArea">
         <div class="col-md-5">
             <img src="<%= recipe.image || recipe.imageUrl %>" class="main-img mb-4">
             
             <div class="stats-box d-flex justify-content-between text-center mt-4">
                 <div><small>PREP TIME</small><br><strong><%= recipe.prepTime || recipe.readyInMinutes || 20 %>m</strong></div>
-                <div><small>SERVES</small><br><strong>4 People</strong></div>
+                <div>
+                    <small>SERVES</small><br>
+                    <input type="number" id="servings" value="4" min="1" max="20" 
+                           class="form-control form-control-sm text-center fw-bold" 
+                           style="width: 60px; margin: 0 auto; background: transparent; color: inherit; border: 1px solid var(--accent-color);" 
+                           onchange="scaleIngredients()">
+                </div>
                 <div><small>DIFFICULTY</small><br><strong>Beginner</strong></div>
+            </div>
+
+            <div class="sub-box mt-4 no-print">
+                <h6 class="fw-bold mb-2">🥬 Ingredient Missing?</h6>
+                <div class="input-group input-group-sm mb-2">
+                    <input type="text" id="subInput" class="form-control" 
+                           placeholder="Type ingredient (e.g. Egg, Milk)..." 
+                           style="background-color: var(--bg-color); color: var(--text-color); border: 1px solid var(--accent-color);">
+                    <button class="btn btn-olive" type="button" onclick="searchSubstitute()">Find</button>
+                </div>
+                <p id="subResult" class="small mb-0 mt-2 text-italic" style="min-height: 20px;"></p>
             </div>
         </div>
 
         <div class="col-md-7 ps-md-5">
             <h6 class="text-uppercase text-muted small">The Apothecary Pantry</h6>
-            <h1 class="display-4 fw-bold mb-4" style="color: #3e4e22;"><%= recipe.title %></h1>
+            <h1 class="display-4 fw-bold mb-4" style="color: var(--heading-color);"><%= recipe.title %></h1>
             
             <h4 class="section-title mt-5 mb-3">Ingredients List</h4>
-            <ul class="list-unstyled">
+            <ul class="list-unstyled" id="ingredientsList">
                 <% if(recipe.extendedIngredients) { %>
                     <% recipe.extendedIngredients.forEach(ing => { %>
-                        <li class="py-1 border-bottom border-light">✔ <%= ing.original %></li>
+                        <li class="py-1 border-bottom border-light ingredient-item" data-base-qty="<%= ing.amount %>">
+                            ✔ <span class="qty"><%= ing.amount %></span> <%= ing.unit %> <%= ing.name %>
+                        </li>
+                    <% }) %>
+                <% } else if (Array.isArray(recipe.ingredients)) { %>
+                     <% recipe.ingredients.forEach(ing => { %>
+                        <li class="py-1 border-bottom border-light">✔ <%= ing %></li>
                     <% }) %>
                 <% } else { %>
                     <li class="py-1 border-bottom border-light">✔ Check instructions for secret ingredients</li>
@@ -40,14 +98,93 @@
 
             <h4 class="section-title mt-5 mb-3">Culinary Protocol</h4>
             <div class="instruction-steps">
-                <p class="lead"><%- recipe.instructions || recipe.summary %></p>
+                <div class="lead"><%- recipe.instructions || recipe.summary %></div>
             </div>
 
-            <div class="mt-5 d-flex gap-3">
-            
-                <a href="javascript:history.back()" class="btn btn-outline-secondary px-4" style="border-radius: 30px;">Go Back</a>
+            <div class="mt-5 d-flex gap-3 no-print">
+                <button class="btn btn-download" onclick="exportToPDF()">
+                    📥 Export PDF Card
+                </button>
             </div>
         </div>
     </div>
+
+    <script>
+        // --- Theme Logic (Night Mode) ---
+        function applyTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeBtn').innerHTML = savedTheme === 'dark' ? '☀️ Day Mode' : '🌙 Night Mode';
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            document.getElementById('themeBtn').innerHTML = next === 'dark' ? '☀️ Day Mode' : '🌙 Night Mode';
+        }
+
+        // --- Portion Scaler Logic ---
+        function scaleIngredients() {
+            const servings = document.getElementById('servings').value;
+            const factor = servings / 4; 
+            const qtyElements = document.querySelectorAll('.qty');
+            
+            qtyElements.forEach(el => {
+                const base = el.parentElement.getAttribute('data-base-qty');
+                if (base) {
+                    el.innerText = (base * factor).toFixed(2);
+                }
+            });
+        }
+
+        // --- Substitution Engine Logic ---
+        const substitutes = {
+            "egg": "1/2 Mashed Banana, 1/4 cup Yogurt, or 1 tbsp Chia seeds in 3 tbsp water.",
+            "milk": "Almond milk, Soy milk, or 1 cup water mixed with 1.5 tsp melted butter.",
+            "butter": "Margarine, Olive oil (use 3/4 amount), or Applesauce for baking.",
+            "sugar": "Honey (use 3/4 cup for every 1 cup sugar) or Maple Syrup.",
+            "flour": "Oat flour, Almond flour, or Rice flour (may need a binder).",
+            "oil": "Applesauce, Mashed bananas, or Melted butter.",
+            "yogurt": "Sour cream, Buttermilk, or Mashed cottage cheese.",
+            "lemon": "Lime juice, White wine, or 1/2 tsp Vinegar.",
+            "garlic": "1/8 tsp Garlic powder for every 1 clove.",
+            "honey": "Maple syrup, Agave nectar, or Sugar syrup."
+        };
+
+        function searchSubstitute() {
+            const input = document.getElementById('subInput').value.toLowerCase().trim();
+            const res = document.getElementById('subResult');
+            
+            if (!input) {
+                res.innerHTML = "Please type an ingredient first!";
+                return;
+            }
+
+            if (substitutes[input]) {
+                res.innerHTML = `<span class="fw-bold" style="color: var(--accent-color)">Try this:</span> ${substitutes[input]}`;
+            } else {
+                res.innerHTML = `<span class="text-danger">Sorry, no substitute found for "${input}".</span>`;
+            }
+        }
+
+        // Enter key support for search
+        document.getElementById('subInput').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                searchSubstitute();
+            }
+        });
+
+        // --- PDF Export Logic ---
+        function exportToPDF() {
+            const originalTitle = document.title;
+            document.title = "PantryChef_<%= recipe.title %>";
+            window.print();
+            document.title = originalTitle;
+        }
+
+        applyTheme();
+    </script>
 </body>
 </html>
