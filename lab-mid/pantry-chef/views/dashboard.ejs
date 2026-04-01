@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantry Chef | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root { --olive: #556B2F; --cream: #fdfae6; --dark: #2c331f; --text: #3e4e22; }
+        body { background-color: var(--cream); color: var(--text); font-family: 'Segoe UI', sans-serif; transition: 0.3s; overflow-x: hidden; }
+        
+        /* Sidebar Styling */
+        .sidebar { width: 260px; height: 100vh; position: fixed; background: #f7f3d7; border-right: 1px solid #e9e6ca; padding: 25px; z-index: 1000; }
+        .nav-link { color: var(--text); font-weight: 600; margin-bottom: 12px; border-radius: 12px; padding: 12px 15px; transition: 0.3s; cursor: pointer; border: none; background: transparent; display: block; text-decoration: none; width: 100%; text-align: left; }
+        .nav-link:hover, .nav-link.active { background: var(--olive); color: white !important; }
+        
+        /* Main Content Area */
+        .main-content { margin-left: 260px; padding: 40px; min-height: 100vh; }
+        
+        /* Recipe Grid & Cards */
+        .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .recipe-card { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #e9e6ca; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .recipe-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(62,78,34,0.12); }
+        .recipe-img { width: 100%; height: 180px; object-fit: cover; }
+        
+        /* Floating (+) Button */
+        .fab { position: fixed; bottom: 35px; right: 35px; width: 65px; height: 65px; background: var(--olive); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); cursor: pointer; border: none; z-index: 1050; transition: 0.3s; }
+        .fab:hover { background: #3e4e22; transform: scale(1.1) rotate(90deg); }
+
+        /* Modal Custom Theme (Cream & Olive) */
+        .modal-content-custom { background-color: var(--cream); border: 2px solid var(--olive); border-radius: 25px; color: var(--text); }
+        .form-control-custom { border: 1px solid #dcd8b9; border-radius: 12px; padding: 12px; margin-bottom: 15px; }
+        .form-control-custom:focus { border-color: var(--olive); box-shadow: 0 0 0 0.2rem rgba(85, 107, 47, 0.1); }
+        .btn-olive { background: var(--olive); color: white; border-radius: 30px; padding: 10px 20px; font-weight: bold; border: none; transition: 0.3s; }
+        .btn-olive:hover { background: #3e4e22; transform: translateY(-2px); }
+
+        /* Dark Mode */
+        body.dark-mode { background-color: var(--dark); color: #fdfae6; }
+        body.dark-mode .sidebar { background: #323a24; border-color: #444; }
+        body.dark-mode .recipe-card, body.dark-mode .modal-content-custom { background: #3a422d; border-color: #556B2F; color: white; }
+        body.dark-mode .nav-link { color: #cbd5c0; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar d-flex flex-column justify-content-between">
+        <div>
+            <h3 class="fw-bold mb-5" style="color: var(--olive);">Pantry Chef</h3>
+            <nav>
+                <a href="/dashboard" class="nav-link active"><i class="bi bi-house-door me-2"></i> HOME</a>
+                <button class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="bi bi-search me-2"></i> SEARCH</button>
+                <button class="nav-link" onclick="toggleDarkMode()"><i id="theme-icon" class="bi bi-moon-stars me-2"></i> NIGHT MODE</button>
+            </nav>
+        </div>
+
+        <div class="d-flex align-items-center p-3 border-top border-secondary border-opacity-25">
+            <img src="https://ui-avatars.com/api/?name=<%= user.username %>&background=556B2F&color=fff" class="rounded-circle me-3" width="45">
+            <div>
+                <p class="m-0 fw-bold small text-uppercase"><%= user.username %></p>
+                <p class="m-0 text-muted" style="font-size: 11px;">CHEF DE PARTIE</p>
+                <a href="/logout" class="text-danger x-small text-decoration-none fw-bold" style="font-size: 10px;">SIGN OUT</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header class="mb-5">
+            <h1 class="fw-bold">Welcome back, <%= user.username %>!</h1>
+            <p class="text-muted lead">Ready to craft some culinary masterpieces today?</p>
+        </header>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="p-4 bg-white rounded-4 border shadow-sm">
+                    <p class="text-muted small fw-bold mb-1">TOTAL RECIPES</p>
+                    <h2 class="fw-bold m-0 text-olive"><%= recipes.length %></h2>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="fw-bold mb-4">Your Curated Collection</h4>
+        <div class="recipe-grid">
+            <% recipes.forEach(recipe => { %>
+                <div class="recipe-card">
+                    <img src="<%= recipe.imageUrl %>" class="recipe-img" onerror="this.src='https://images.unsplash.com/photo-1495195129352-aed325a55b65?w=500'">
+                    <div class="p-3">
+                        <span class="badge bg-light text-success mb-2 border"><%= recipe.prepTime %> MIN</span>
+                        <h5 class="fw-bold mb-1"><%= recipe.title %></h5>
+                        <p class="text-muted small text-truncate"><%= recipe.ingredients.join(', ') %></p>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <button class="fab" data-bs-toggle="modal" data-bs-target="#addRecipeModal">+</button>
+
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-content-custom p-4 text-center">
+                <h3 class="fw-bold mb-3" style="color: var(--olive);">Quick Search</h3>
+                <p class="text-muted mb-4">Find recipes by ingredients you already have.</p>
+                <form action="/search" method="GET">
+                    <input type="text" name="items" class="form-control form-control-custom text-center" placeholder="e.g. Tomato, Garlic, Basil" required>
+                    <button type="submit" class="btn-olive w-100 py-3 mt-2">SEARCH RECIPES →</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addRecipeModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-content-custom">
+                <div class="modal-header border-0 px-4 pt-4">
+                    <h4 class="fw-bold m-0" style="color: var(--olive);">Add New Recipe</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body px-4 pb-4">
+                    <form id="addRecipeForm">
+                        <label class="small fw-bold mb-1">TITLE</label>
+                        <input type="text" name="title" class="form-control form-control-custom" placeholder="Recipe Name" required>
+                        
+                        <label class="small fw-bold mb-1">INGREDIENTS (Comma separated)</label>
+                        <input type="text" name="ingredients" class="form-control form-control-custom" placeholder="e.g. Flour, Water, Yeast" required>
+                        
+                        <label class="small fw-bold mb-1">INSTRUCTIONS</label>
+                        <textarea name="instructions" class="form-control form-control-custom" rows="3" placeholder="How to prepare..." required></textarea>
+                        
+                        <div class="row">
+                            <div class="col-8">
+                                <label class="small fw-bold mb-1">IMAGE URL</label>
+                                <input type="url" name="imageUrl" class="form-control form-control-custom" placeholder="https://...">
+                            </div>
+                            <div class="col-4">
+                                <label class="small fw-bold mb-1">TIME (MIN)</label>
+                                <input type="number" name="prepTime" class="form-control form-control-custom" placeholder="30">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-olive w-100 py-3 mt-3">SAVE TO PANTRY</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // --- 1. Night Mode Logic ---
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                icon.className = 'bi bi-sun-fill me-2';
+            } else {
+                localStorage.setItem('theme', 'light');
+                icon.className = 'bi bi-moon-stars me-2';
+            }
+        }
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('theme-icon').className = 'bi bi-sun-fill me-2';
+        }
+
+        // --- 2. AJAX Add Recipe Logic ---
+        document.getElementById('addRecipeForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            data.ingredients = data.ingredients.split(',').map(i => i.trim()); 
+
+            const response = await fetch('/add-recipe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                location.reload(); 
+            } else {
+                alert("Could not save recipe. Please try again.");
+            }
+        };
+    </script>
+</body>
+</html>
