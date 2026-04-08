@@ -113,13 +113,14 @@ Signup and login
 Signup and Login 
 •	What is happening: These screens handle user boarding and secure access.
 •	Technical Detail: The backend utilizes bcryptjs for password hashing and express-session to keep the user logged in. Once authenticated, the server creates a unique session cookie that allows the user to access their private dashboard.
+
 Dashboard:
- <img width="745" height="369" alt="image" src="https://github.com/user-attachments/assets/923d8448-8b60-4c77-9df6-48f5bfb43b3e" />
+<img width="745" height="369" alt="image" src="https://github.com/user-attachments/assets/923d8448-8b60-4c77-9df6-48f5bfb43b3e" />
 
 Dashboard (Home, Search, & Night Mode, Add Recipe Modal) 
 •	What is happening: The main hub of the project. It shows a summary of the user's personal collection (e.g., "3 Total Recipes").
  
- <img width="734" height="362" alt="image" src="https://github.com/user-attachments/assets/8bd40ef7-da9d-4991-9973-1abe15eda3cf" />
+<img width="734" height="362" alt="image" src="https://github.com/user-attachments/assets/8bd40ef7-da9d-4991-9973-1abe15eda3cf" />
 <img width="740" height="369" alt="image" src="https://github.com/user-attachments/assets/70616372-96cb-43e1-b849-a16a6419b4d4" />
 
 •	Technical Detail: * Persistent Sidebar: Provides one-click access to Home, Search, and Night Mode from anywhere.
@@ -132,14 +133,14 @@ o	Add Recipe Modal: Triggered by the Floating Action Button (+), this allows the
 
 
 Result Screen:
- <img width="756" height="376" alt="image" src="https://github.com/user-attachments/assets/93b39bfd-29ed-47ae-9f42-d04b3d41d270" />
+<img width="756" height="376" alt="image" src="https://github.com/user-attachments/assets/93b39bfd-29ed-47ae-9f42-d04b3d41d270" />
 
 Search Result Screen 
 •	What is happening: This view displays the results of the "Hybrid Search."
 •	Technical Detail: The system is simultaneously querying the local MongoDB database and the Spoonacular API. It uses a card-grid layout to display recipe titles and high-quality images, encouraging the user to click for more details.
 
 Detail Screen:
- <img width="760" height="381" alt="image" src="https://github.com/user-attachments/assets/3c202da6-edc2-4ff3-97b6-0f3420ea24e3" />
+<img width="760" height="381" alt="image" src="https://github.com/user-attachments/assets/3c202da6-edc2-4ff3-97b6-0f3420ea24e3" />
 
 Detailed Recipe View 
 •	What is happening: The final stage of the user flow where the actual cooking instructions are presented.
@@ -148,7 +149,7 @@ o	Portion Scaler: Users can change the "Serves" input, and the ingredient amount
 o	Substitution Engine: A dedicated box allows users to type an ingredient they are missing to find a safe alternative.
 o	Export PDF: A button that triggers a print-optimized CSS view, allowing the chef to have a physical copy of the recipe in the kitchen.
 In Night Mode:
- <img width="736" height="367" alt="image" src="https://github.com/user-attachments/assets/184703a5-7fed-4876-89ac-399995505c13" />
+<img width="736" height="367" alt="image" src="https://github.com/user-attachments/assets/184703a5-7fed-4876-89ac-399995505c13" />
 <img width="739" height="367" alt="image" src="https://github.com/user-attachments/assets/bcc79e91-7e23-4392-b849-582b9c93c25c" />
 <img width="721" height="358" alt="image" src="https://github.com/user-attachments/assets/687a5e54-266f-4283-bfbf-12ec7dab313c" />
 <img width="728" height="362" alt="image" src="https://github.com/user-attachments/assets/3144fdc4-06c9-4a5d-9d1e-3b4f1fe08dfc" />
@@ -163,7 +164,7 @@ In Night Mode:
  
 PDF :
 <img width="975" height="598" alt="image" src="https://github.com/user-attachments/assets/ad5a175a-b75e-40f3-8cfe-1d1a0295717b" />
- <img width="975" height="634" alt="image" src="https://github.com/user-attachments/assets/4c2b21ee-b2d6-4b27-ae2f-e45168d5846f" />
+<img width="975" height="634" alt="image" src="https://github.com/user-attachments/assets/4c2b21ee-b2d6-4b27-ae2f-e45168d5846f" />
  
 Video Demonstration:
 link:https://drive.google.com/file/d/1QbK3cwoZHJ-1_7Y9pvwke81jxLfJtLge/view?usp=drive_link
