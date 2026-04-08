@@ -1,72 +1,94 @@
-🌿 Pantry Chef | Olive Edition
-Pantry Chef is a full-stack recipe management system built with the Apothecary Aesthetic. It allows users to manage their personal recipes via a local MongoDB database while providing a hybrid search experience integrated with the Spoonacular API.
+# 🍳 Pantry Chef – Digital Culinary Atelier
 
-🚀 Features
-Aesthetic Splash Screen: A beautiful entry point for the user.
+**Pantry Chef** is a sophisticated full-stack web application designed to bridge the gap between local pantry management and global culinary inspiration. Using a premium **Olive & Cream** aesthetic, the system allows users to securely manage personal recipes via a MongoDB dashboard while searching the **Spoonacular API** for worldwide culinary data.
 
-Unified Dashboard: Manage (Create, Read, Update, Delete) local recipes.
+---
 
-Hybrid Search: Search ingredients across local MongoDB and the Global Spoonacular API.
+## 🚀 Key Features & Innovation
 
-Olive & Cream UI: A premium, organic design for a gourmet experience.
+### 🧠 Hybrid Search Engine
+This is a dual-layer search system that provides a comprehensive user experience:
+* **Local Discovery:** It first scans the user's private MongoDB collection for personal "Chef Specials."
+* **Global Inspiration:** Simultaneously, it fetches millions of recipes from the **Spoonacular API**.
+* **Smart Ingredient Matcher ($all logic):** To solve the "leftover" problem, the search engine uses a strict MongoDB matching algorithm. This ensures that suggested recipes contain **all** user-specified ingredients, not just some of them.
 
-RESTful API: Clean endpoints with proper HTTP methods and status codes.
+### 🛠 Smart Culinary Tools
+* **Dynamic Portion Scaler:** A client-side mathematical engine. When a user changes the "Serves" count, JavaScript instantly recalculates ingredient quantities (Amount * [New Servings / Original Servings]) without a page refresh.
+* **Substitution Engine (NLP-Lite):** A dedicated lookup database that provides instant alternatives for missing ingredients (e.g., substituting Yogurt for Eggs), ensuring cooking never stops.
+* **Culinary PDF Export:** Uses CSS `@media print` rules to hide UI elements like buttons and sidebars, generating a clean, professional recipe card for physical printing.
 
-🛠️ Tech Stack
-Backend: Node.js, Express.js
+### 🎨 Premium UI/UX
+* **Persistent Global Sidebar:** A unified navigation anchor. Unlike traditional top-bars, this sidebar stays fixed, allowing the user to switch between Home, Search, and Night Mode instantly, which reduces "navigation friction."
+* **Chef’s Night Mode:** Implemented using CSS Variables and Browser **Local Storage**. The theme preference is saved on the user's device, so the app stays in Night Mode even after the browser is closed.
+* **Apothecary Aesthetic:** Curated use of `#556B2F` (Olive) and `#fdfae6` (Cream) to create a high-end, organic "Chef’s Journal" feel.
 
-Database: MongoDB (Mongoose)
+---
 
-Frontend: EJS, Bootstrap 5, Custom CSS
+## 🛡 Security & Middleware
 
-API Testing: Postman
+* **Password Security (Bcrypt.js):** We prioritize user data integrity. Passwords undergo **Salting and Hashing** using `bcryptjs` before being stored. This means even the database administrator cannot see raw passwords.
+* **Session Management:** Using `express-session`, the server maintains a secure state for each user. Unauthorized users are automatically redirected to the login page if they try to access the `/dashboard` via URL.
+* **AJAX-Powered Interactions:** The "Add Recipe" and "Quick Search" features utilize the **Fetch API**. By sending data asynchronously, we perform database operations in the background, keeping the user in their "Flow State" without full page reloads.
 
-External API: Spoonacular API
+---
 
-⚙️ Installation & Setup
-Follow these steps to get the project running on your local machine:
+## 🏗 System Architecture (MVC Pattern)
 
-1. Clone the Repository
-   
-git clone <your-github-repo-link>
-cd pantry-chef
-3. Install Dependencies
-Make sure you have Node.js installed, then run:
+The application follows a strictly decoupled **Model-View-Controller** design to ensure the code is clean, modular, and easy to maintain:
 
+* **Model:** Defines the data structure (Schemas) for Users and Recipes in MongoDB using Mongoose.
+* **View:** Uses EJS templates to render dynamic data into a responsive Bootstrap 5 interface.
+* **Controller/Routes:** The logic layer that processes requests, handles API calls, and manages the flow between the Database and the UI.
 
-npm install
-3. Environment Variables
-Create a .env file in the root directory and add your credentials:
+---
 
-Code snippet
-PORT=3000
-MONGO_URI=your_mongodb_connection_string
-API_KEY=your_spoonacular_api_key
-4. Run the Application
-Start the server using:
+## 🛠 Tech Stack
 
+| Component | Technology Used | Technical Reason |
+| :--- | :--- | :--- |
+| **Runtime Environment** | Node.js | For high-performance, asynchronous server-side execution. |
+| **Framework** | Express.js | To handle complex routing and middleware efficiently. |
+| **Database** | MongoDB (NoSQL) | Flexible document storage perfect for varied recipe data. |
+| **Template Engine** | EJS | To inject dynamic server-side data directly into HTML. |
+| **Styling** | Bootstrap 5 | To ensure a Mobile-First, fully responsive layout. |
+| **HTTP Client** | Axios | For reliable asynchronous fetching of external API data. |
+| **API Provider** | Spoonacular API | The industry standard for high-quality culinary data. |
 
-npm start
-# OR
-node bin/www
-Open http://localhost:3000 in your browser.
+---
 
-📂 Project Structure
-/models - Mongoose schemas (Recipe.js)
+## 🛣 API Route Map
 
-/routes - RESTful API endpoints
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| **GET** | `/` | Welcome Splash Screen: Initiates branding and session check. |
+| **GET** | `/dashboard` | Main Hub: Displays user-specific recipes via `Recipe.find()`. |
+| **GET** | `/search` | Hybrid Search: Executes both MongoDB and Spoonacular queries. |
+| **POST** | `/add-recipe` | AJAX Create: Saves new data to MongoDB without page refresh. |
+| **PUT** | `/update-recipe/:id` | Update Logic: Modifies existing records based on unique ObjectIDs. |
+| **DELETE** | `/delete-recipe/:id` | Delete Logic: Safely removes records from the database. |
 
-/views - EJS templates (Splash, Dashboard, Search Results)
+---
 
-/public - Images and Custom CSS
+## 📂 Project Structure
 
-🧪 API Testing
-You can test the following RESTful endpoints using Postman:
+```text
+pantry-chef/
+├── models/             # Database structures (User.js, Recipe.js)
+├── public/             # Static assets (Custom CSS, LocalStorage JS, Images)
+├── routes/             # Controller logic and URL definitions (index.js)
+├── views/              # Dynamic UI templates (dashboard.ejs, results.ejs, detail.ejs)
+├── app.js              # Central server config, Security middleware, & Session setup
+└── package.json        # Project metadata and Dependency list
+👨‍💻 Developed By
+Aniqa Fatima Registration No: SP23-BSE-002
 
-GET /dashboard - View all local recipes
+Course: Advance Web Technology
 
-POST /add-recipe - Create a new recipe
+Instructor: Mam Yasmeen Jana
 
-PUT /update-recipe/:id - Update an existing recipe
+🌟 User-Centric Design Decisions
+Solving the "Messy Hands" Problem: We added PDF Export so users can print recipes and avoid touching their devices with flour or water.
 
-DELETE /delete-recipe/:id - Remove a recipe
+Solving the "Dim Lighting" Problem: Night Mode was added specifically for low-light kitchen environments to reduce eye strain.
+
+The "Problem Solver" Approach: Most apps just display data. Pantry Chef solves problems by offering Substitutions when an ingredient is missing, making it a true utility tool for the modern kitchen.
