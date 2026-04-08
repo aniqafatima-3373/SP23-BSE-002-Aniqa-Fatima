@@ -37,13 +37,7 @@ This is a dual-layer search system that provides a comprehensive user experience
 
 The application follows a strictly decoupled **Model-View-Controller** design to ensure the code is clean, modular, and easy to maintain:
 =======
-🍳 Pantry Chef – Digital Culinary Atelier
 
-Pantry Chef is a sophisticated full-stack web application designed to bridge the gap between local pantry management and global culinary inspiration. Using a premium Olive & Cream aesthetic, the system allows users to securely manage personal recipes via a MongoDB dashboard while searching the Spoonacular API for worldwide culinary data.
-🚀 Key Features & Innovation
-🧠 Hybrid Search Engine
-A robust search logic that queries both local MongoDB collections and the Spoonacular API based on user-inputted ingredients.
->>>>>>> 8f23b7560656baa9a582180cceede9e3c900cf89
 
 * **Model:** Defines the data structure (Schemas) for Users and Recipes in MongoDB using Mongoose.
 * **View:** Uses EJS templates to render dynamic data into a responsive Bootstrap 5 interface.
