@@ -98,7 +98,7 @@ pantry-chef/
 Output of the Pantry Chef 
 Splash Screen:
  
- <img width="743" height="371" alt="image" src="https://github.com/user-attachments/assets/4a78346b-72fb-45ae-b7da-eeda6ae8e074" />
+<img width="743" height="371" alt="image" src="https://github.com/user-attachments/assets/4a78346b-72fb-45ae-b7da-eeda6ae8e074" />
 <img width="734" height="365" alt="image" src="https://github.com/user-attachments/assets/a9f7ee49-6266-4e4f-a4a0-55a26301a3a8" />
 
 Splash Screen & Features 
@@ -107,7 +107,7 @@ Splash Screen & Features
 
 Signup and login
 <img width="743" height="378" alt="image" src="https://github.com/user-attachments/assets/42b9b645-3a1a-42f4-8ea4-173fb4c738ac" />
- <img width="752" height="376" alt="image" src="https://github.com/user-attachments/assets/0ad0cafe-b943-410f-841c-ea768bd405bd" />
+<img width="752" height="376" alt="image" src="https://github.com/user-attachments/assets/0ad0cafe-b943-410f-841c-ea768bd405bd" />
 
  
 Signup and Login 
