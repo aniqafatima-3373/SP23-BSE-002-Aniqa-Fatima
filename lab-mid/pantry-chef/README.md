@@ -114,7 +114,9 @@ Signup and Login
 •	What is happening: These screens handle user boarding and secure access.
 •	Technical Detail: The backend utilizes bcryptjs for password hashing and express-session to keep the user logged in. Once authenticated, the server creates a unique session cookie that allows the user to access their private dashboard.
 
+
 Dashboard:
+
 <img width="745" height="369" alt="image" src="https://github.com/user-attachments/assets/923d8448-8b60-4c77-9df6-48f5bfb43b3e" />
 
 Dashboard (Home, Search, & Night Mode, Add Recipe Modal) 
@@ -124,7 +126,9 @@ Dashboard (Home, Search, & Night Mode, Add Recipe Modal)
 <img width="740" height="369" alt="image" src="https://github.com/user-attachments/assets/70616372-96cb-43e1-b849-a16a6419b4d4" />
 
 •	Technical Detail: * Persistent Sidebar: Provides one-click access to Home, Search, and Night Mode from anywhere.
+
 o	Search Modal: A "Quick Search" popup that allows users to find recipes without a full page reload.
+
 o	Add Recipe Modal: Triggered by the Floating Action Button (+), this allows the user to save new recipes directly to MongoDB via a POST request.
 
 
