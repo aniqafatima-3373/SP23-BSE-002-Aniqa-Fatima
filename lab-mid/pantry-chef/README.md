@@ -52,7 +52,7 @@ Smart Ingredient Matcher ($all logic): The search engine uses a strict matching 
 🛠 Smart Culinary Tools
 
 Dynamic Portion Scaler: A client-side mathematical engine that adjusts ingredient quantities in real-time based on the number of servings.
->>>>>>> 8f23b7560656baa9a582180cceede9e3c900cf89
+
 
 | Component | Technology Used | Technical Reason |
 | :--- | :--- | :--- |
@@ -91,39 +91,4 @@ pantry-chef/
 ├── app.js              # Central server config, Security middleware, & Session setup
 └── package.json        # Project metadata and Dependency list
 👨‍💻 Developed By
-Aniqa Fatima Registration No: SP23-BSE-002
 
-Course: Advance Web Technology
-
-Instructor: Mam Yasmeen Jana
-
-🌟 User-Centric Design Decisions
-Solving the "Messy Hands" Problem: We added PDF Export so users can print recipes and avoid touching their devices with flour or water.
-
-Solving the "Dim Lighting" Problem: Night Mode was added specifically for low-light kitchen environments to reduce eye strain.
-
-The "Problem Solver" Approach: Most apps just display data. Pantry Chef solves problems by offering Substitutions when an ingredient is missing, making it a true utility tool for the modern kitchen.
-=======
-Substitution Engine (NLP-Lite): A searchable database that provides instant alternatives for missing ingredients to prevent cooking interruptions.
-
-
-Culinary PDF Export: A print-optimized feature that converts digital recipes into physical cards using CSS Media Queries.
-🎨 Premium UI/UX
-
-Persistent Sidebar: A unified navigation anchor providing seamless flow across all application states (Dashboard, Search, Detail).
-
-
-Chef’s Night Mode: A persistent, low-light UI theme synchronized across the app using Browser Local Storage.
-
-
-Apothecary Aesthetic: Professional use of #556B2F (Olive) and #fdfae6 (Cream) for a high-end gourmet experience.
-🛡 Security & Middleware
-Password Security (Bcrypt.js): User passwords are "salted and hashed" using bcryptjs before storage, ensuring plain text credentials are never saved in the database.
-Session Management: Implemented via express-session to maintain an authenticated state and prevent unauthorized access to the /dashboard.
-AJAX-Powered Interactions: The "Add Recipe" and "Quick Search" features utilize the Fetch API/AJAX, allowing users to perform CRUD operations without a full page reload, maintaining a "Single-Page Experience."
-🏗 System Architecture (MVC Pattern)The application follows a strictly decoupled Model-View-Controller design to ensure scalability:
-Model: Defines the recipe and user schemas in MongoDB using Mongoose.
-View: Interactive templates created with EJS and styled with Bootstrap 5.
-Controller/Routes: Node.js logic handling CRUD operations, authentication, and External API coordination.
-
->>>>>>> 8f23b7560656baa9a582180cceede9e3c900cf89
