@@ -94,3 +94,60 @@ pantry-chef/
 ├── views/              # Dynamic UI templates (dashboard, results, detail)
 ├── app.js              # Server configuration & Security middleware
 └── package.json        # Project metadata and dependencies
+```
+Output of the Pantry Chef 
+Splash Screen:
+ 
+ <img width="743" height="371" alt="image" src="https://github.com/user-attachments/assets/4a78346b-72fb-45ae-b7da-eeda6ae8e074" />
+
+Splash Screen & Features 
+•	What is happening: This is the entry point of the application. It provides a high-impact visual introduction to the "Pantry Chef" brand.
+•	Technical Detail: Below the fold, it highlights the three core "value propositions": Hybrid Search, Portion Scaler, and the Substitution Engine to educate the user before they sign in.
+
+Signup and login
+ 
+ 
+Signup and Login 
+•	What is happening: These screens handle user boarding and secure access.
+•	Technical Detail: The backend utilizes bcryptjs for password hashing and express-session to keep the user logged in. Once authenticated, the server creates a unique session cookie that allows the user to access their private dashboard.
+Dashboard:
+ 
+Dashboard (Home, Search, & Night Mode, Add Recipe Modal) 
+•	What is happening: The main hub of the project. It shows a summary of the user's personal collection (e.g., "3 Total Recipes").
+ 
+ 
+•	Technical Detail: * Persistent Sidebar: Provides one-click access to Home, Search, and Night Mode from anywhere.
+o	Search Modal: A "Quick Search" popup that allows users to find recipes without a full page reload.
+o	Add Recipe Modal: Triggered by the Floating Action Button (+), this allows the user to save new recipes directly to MongoDB via a POST request.
+
+
+
+
+
+
+Result Screen:
+ 
+Search Result Screen 
+•	What is happening: This view displays the results of the "Hybrid Search."
+•	Technical Detail: The system is simultaneously querying the local MongoDB database and the Spoonacular API. It uses a card-grid layout to display recipe titles and high-quality images, encouraging the user to click for more details.
+
+Detail Screen:
+ 
+Detailed Recipe View 
+•	What is happening: The final stage of the user flow where the actual cooking instructions are presented.
+•	Technical Detail:
+o	Portion Scaler: Users can change the "Serves" input, and the ingredient amounts update instantly using client-side math.
+o	Substitution Engine: A dedicated box allows users to type an ingredient they are missing to find a safe alternative.
+o	Export PDF: A button that triggers a print-optimized CSS view, allowing the chef to have a physical copy of the recipe in the kitchen.
+In Night Mode:
+ 
+ 
+ 
+ 
+ 
+
+
+ 
+PDF :
+ 
+
