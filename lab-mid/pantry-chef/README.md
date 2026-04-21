@@ -120,7 +120,8 @@ Signup and Login
 
 Dashboard:
 
-<img width="745" height="369" alt="image" src="https://github.com/user-attachments/assets/923d8448-8b60-4c77-9df6-48f5bfb43b3e" />
+<img width="1919" height="926" alt="image" src="https://github.com/user-attachments/assets/14a044ba-9aae-4951-aa2a-3dee97c7ceb4" />
+
 
 Dashboard (Home, Search, & Night Mode, Add Recipe Modal) 
 •	What is happening: The main hub of the project. It shows a summary of the user's personal collection (e.g., "3 Total Recipes").
