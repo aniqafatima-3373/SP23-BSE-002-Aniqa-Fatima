@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Tailwind v4 ke mutabiq hamare custom luxury colors */
+@theme {
+  --color-sproutBg: #FDFBF7;
+  --color-sproutDark: #1B3022;
+  --color-sproutOlive: #808000;
+}
+
+/* Vite ke default grid/center system ko khatam karne ke liye override */
+body {
+  margin: 0 !important;
+  display: block !important;
+  place-items: unset !important;
+  background-color: #FDFBF7 !important; /* Premium Off-white */
+  color: #1B3022 !important;            /* Deep Forest Green */
+  min-height: 100vh;
+}
